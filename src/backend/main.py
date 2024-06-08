@@ -1,11 +1,13 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 # from azure.monitor.opentelemetry import configure_azure_monitor
-from .routers import menu
+from .routers import menu, customers
 
-from .initial_data_loader import load_initial_data
-from .database import get_db
+from .db.initial_data_loader import load_initial_data
+from .db.database import get_db
+
+
 app = FastAPI()
 
 @app.get("/hello")
@@ -29,6 +31,7 @@ app.add_middleware(
 )
 
 app.include_router(menu.router)
+app.include_router(customers.router)
 
 # @app.get("/menu-items/{day}", response_model=List[MenuItemCreate])
 # def get_menu_items_for_day(day: str, db: Session = Depends(get_db)):

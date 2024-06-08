@@ -1,0 +1,28 @@
+{
+    "Monday": [
+        {
+            "name": "Pizza Meat Lovers",
+            "price": 14.99,
+            "ingredients": ["tomato", "mozzarella cheese", "pepperoni", "ham", "sausage", "bacon"],
+            "label": ""
+        }
+    ],
+    "Tuesday": [
+        {
+            "name": "Grilled Chicken Salad",
+            "price": 12.99,
+            "ingredients": ["chicken", "lettuce", "tomatoes", "cucumbers", "olive oil"],
+            "label": "Gluten-free"
+        }
+    ],
+    "Wednesday": [
+    ],
+    "Thursday": [
+    ],
+    "Friday": [
+    ],
+    "Saturday": [
+    ],
+    "Sunday": [
+    ]
+}

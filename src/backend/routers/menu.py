@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from ..database import get_db
-from ..models import MenuItem
+from ..db.database import get_db
+from ..db.models import MenuItem
 
 router = APIRouter()
 
