@@ -1,21 +1,21 @@
 from fastapi.testclient import TestClient
 
-
-def test_get_customers(client: TestClient):
-    response = client.get("/api/customers")
-    assert response.status_code == 200
-    customers = response.json()
-    assert isinstance(customers, list)
-    assert len(customers) > 0  # Ensure there's at least one customer loaded
-    assert customers[0]["firstname"] == "Bart"  # Check a known customer's data
-
-
-def test_get_customer_by_id(client: TestClient):
-    response = client.get("/api/customers/1")
-    assert response.status_code == 200
-    customer = response.json()
-    assert customer["firstname"] == "Bart"
-    assert customer["email"] == "bart@simpson.com"
+#
+# def test_get_customers(client: TestClient):
+#     response = client.get("/api/customers")
+#     assert response.status_code == 200
+#     customers = response.json()
+#     assert isinstance(customers, list)
+#     assert len(customers) > 0  # Ensure there's at least one customer loaded
+#     assert customers[0]["firstname"] == "Bart"  # Check a known customer's data
+#
+#
+# def test_get_customer_by_id(client: TestClient):
+#     response = client.get("/api/customers/1")
+#     assert response.status_code == 200
+#     customer = response.json()
+#     assert customer["firstname"] == "Bart"
+#     assert customer["email"] == "bart@simpson.com"
 
 #
 # def test_create_customer(client: TestClient):

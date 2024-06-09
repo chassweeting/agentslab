@@ -5,8 +5,7 @@ from sqlalchemy.orm import Session
 
 from ..db.database import get_db
 from ..db.models import Customer, MenuItem, Order, OrderItem, OrderStatus
-from .schemas import (OrderCreate, OrderInDB, OrderItemCreate, OrderItemInDB,
-                      OrderUpdate)
+from .schemas import OrderCreate, OrderInDB, OrderItemCreate, OrderItemInDB, OrderUpdate
 
 router = APIRouter()
 

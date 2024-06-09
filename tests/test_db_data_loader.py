@@ -1,11 +1,12 @@
-import pytest
 import json
-from unittest.mock import patch, mock_open
-from sqlalchemy.orm import Session
 from pathlib import Path
+from unittest.mock import mock_open, patch
 
-from src.backend.db.models import Customer, MenuItem
+import pytest
+from sqlalchemy.orm import Session
+
 from src.backend.db.initial_data_loader import load_customers, load_regular_menus
+from src.backend.db.models import Customer, MenuItem
 
 # Mock data similar to what you'd have in your JSON files
 mock_menu_data = {

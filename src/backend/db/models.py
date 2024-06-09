@@ -1,15 +1,14 @@
 from datetime import datetime
 from enum import Enum as PyEnum
 
-from sqlalchemy import (Boolean, Column, DateTime, Float, ForeignKey, Integer,
-                        String, Text)
+from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
 
 from .database import Base
 
 
 class MenuItem(Base):
-    __tablename__ = 'menu_items'
+    __tablename__ = "menu_items"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
@@ -33,7 +32,7 @@ class MenuItem(Base):
 
 
 class Customer(Base):
-    __tablename__ = 'customers'
+    __tablename__ = "customers"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     firstname = Column(String, nullable=False)
@@ -66,10 +65,10 @@ class OrderStatus(PyEnum):
 
 
 class Order(Base):
-    __tablename__ = 'orders'
+    __tablename__ = "orders"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    customer_id = Column(Integer, ForeignKey('customers.id'), nullable=False)
+    customer_id = Column(Integer, ForeignKey("customers.id"), nullable=False)
     order_date = Column(DateTime, default=datetime.utcnow)
     total_amount = Column(Float, nullable=False)
 
@@ -82,11 +81,11 @@ class Order(Base):
 
 
 class OrderItem(Base):
-    __tablename__ = 'order_items'
+    __tablename__ = "order_items"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    order_id = Column(Integer, ForeignKey('orders.id'), nullable=False)
-    menu_item_id = Column(Integer, ForeignKey('menu_items.id'), nullable=False)
+    order_id = Column(Integer, ForeignKey("orders.id"), nullable=False)
+    menu_item_id = Column(Integer, ForeignKey("menu_items.id"), nullable=False)
     quantity = Column(Integer, nullable=False)
     note = Column(Text, nullable=True)
 
@@ -99,7 +98,7 @@ class OrderItem(Base):
 
 
 class OpeningHours(Base):
-    __tablename__ = 'opening_hours'
+    __tablename__ = "opening_hours"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     day = Column(String, nullable=False)

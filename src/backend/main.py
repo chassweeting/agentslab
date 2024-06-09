@@ -2,7 +2,7 @@ from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .db.initial_data_loader import load_initial_data
-from .routers import customers, menu_items, orders, opening_hours
+from .routers import customers, menu_items, opening_hours, orders
 
 app = FastAPI()
 

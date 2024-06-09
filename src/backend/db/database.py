@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 path = Path(__file__).parent / "pos.db"
 DATABASE_URL = f"sqlite:///{path}"

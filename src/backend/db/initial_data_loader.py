@@ -1,11 +1,11 @@
 import json
-from pathlib import Path
 from datetime import datetime, timedelta
+from pathlib import Path
 
 from sqlalchemy.orm import Session
 
 from .database import drop_db, get_db, init_db
-from .models import Customer, MenuItem, Order, OrderItem, OpeningHours, OrderStatus
+from .models import Customer, MenuItem, OpeningHours, Order, OrderItem, OrderStatus
 
 
 async def load_initial_data():
@@ -32,13 +32,13 @@ def load_regular_menus(db: Session):
         json_data = json.load(f)
 
     availability_all_days = {
-        'available_monday': True,
-        'available_tuesday': True,
-        'available_wednesday': True,
-        'available_thursday': True,
-        'available_friday': True,
-        'available_saturday': True,
-        'available_sunday': True
+        "available_monday": True,
+        "available_tuesday": True,
+        "available_wednesday": True,
+        "available_thursday": True,
+        "available_friday": True,
+        "available_saturday": True,
+        "available_sunday": True
     }
 
     try:
@@ -47,11 +47,11 @@ def load_regular_menus(db: Session):
             for item in items:
                 # Create a MenuItem instance with data from JSON and set it to be available every day
                 menu_item = MenuItem(
-                    name=item['name'],
-                    price=item['price'],
-                    ingredients=', '.join(item['ingredients']),
+                    name=item["name"],
+                    price=item["price"],
+                    ingredients=", ".join(item["ingredients"]),
                     category=category,
-                    labels=item['label'],
+                    labels=item["label"],
                     **availability_all_days
                 )
                 # Add the menu item to the session
@@ -82,18 +82,18 @@ def load_specials(db: Session):
             for item in items:
                 # Create a MenuItem instance with data from JSON
                 special_item = MenuItem(
-                    name=item['name'],
-                    price=item['price'],
-                    ingredients=', '.join(item['ingredients']),
-                    category='Special',  # Use 'Special' as a category to distinguish from regular items
-                    labels=item.get('label', ''),
-                    available_monday=(day == 'Monday'),
-                    available_tuesday=(day == 'Tuesday'),
-                    available_wednesday=(day == 'Wednesday'),
-                    available_thursday=(day == 'Thursday'),
-                    available_friday=(day == 'Friday'),
-                    available_saturday=(day == 'Saturday'),
-                    available_sunday=(day == 'Sunday')
+                    name=item["name"],
+                    price=item["price"],
+                    ingredients=", ".join(item["ingredients"]),
+                    category="Special",  # Use 'Special' as a category to distinguish from regular items
+                    labels=item.get("label", ""),
+                    available_monday=(day == "Monday"),
+                    available_tuesday=(day == "Tuesday"),
+                    available_wednesday=(day == "Wednesday"),
+                    available_thursday=(day == "Thursday"),
+                    available_friday=(day == "Friday"),
+                    available_saturday=(day == "Saturday"),
+                    available_sunday=(day == "Sunday")
                 )
                 # Add the special item to the session
                 db.add(special_item)
@@ -123,20 +123,20 @@ def load_customers(db: Session):
         # Iterate over each customer in the JSON data
         for customer in json_data:
             # Flatten the nested address into individual fields
-            address = customer['address']
+            address = customer["address"]
             customer_record = Customer(
-                firstname=customer['firstname'],
-                lastname=customer['lastname'],
-                email=customer['email'],
-                external_id=customer['id'],
-                card_digits=customer['card_digits'],
-                street=address['street'],
-                city=address['city'],
-                state=address['state'],
-                zip=address['zip'],
-                country=address['country'],
-                special=customer['special'].lower() == "true",  # Convert "true"/"false" string to Boolean
-                phone=customer['phone']
+                firstname=customer["firstname"],
+                lastname=customer["lastname"],
+                email=customer["email"],
+                external_id=customer["id"],
+                card_digits=customer["card_digits"],
+                street=address["street"],
+                city=address["city"],
+                state=address["state"],
+                zip=address["zip"],
+                country=address["country"],
+                special=customer["special"].lower() == "true",  # Convert "true"/"false" string to Boolean
+                phone=customer["phone"]
             )
             # Add the customer record to the session
             db.add(customer_record)
