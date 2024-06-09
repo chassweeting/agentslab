@@ -69,7 +69,7 @@ def update_customer(customer_id: int, customer_update: CustomerUpdate, db: Sessi
     if not db_customer:
         raise HTTPException(status_code=404, detail="Customer not found")
 
-    update_data = customer_update.dict(exclude_unset=True)
+    update_data = customer_update.dict(exclude_unset=True) # Exclude fields not provided in the request
     for key, value in update_data.items():
         setattr(db_customer, key, value)
 

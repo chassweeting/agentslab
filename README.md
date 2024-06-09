@@ -28,6 +28,10 @@ Run:
 `poetry run jupyter lab`
 
 
+Note: this is a contrived example - a real point of sale system would allow for 
+variants and add-on options for each menu item. 
+
+
 ## Dependencies 
 
 You will require access to the 

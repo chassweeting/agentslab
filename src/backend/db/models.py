@@ -1,4 +1,5 @@
 from datetime import datetime
+from enum import Enum as PyEnum
 
 from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, DateTime, Text
 from sqlalchemy.orm import relationship
@@ -45,6 +46,14 @@ class Customer(Base):
 
     orders = relationship("Order", back_populates="customer")  # One-to-many relationship
 
+
+
+class OrderStatus(PyEnum):
+    PENDING = "pending"           # Order has been taken from the customer, but cooking has not started
+    IN_PROGRESS = "in_progress"   # Order is being cooked
+    DISPATCHED = "dispatched"     # Order has been dispatched, en route for delivery
+    DELIVERED = "delivered"
+    CANCELLED = "cancelled"
 
 
 class Order(Base):

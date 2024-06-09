@@ -5,16 +5,19 @@ from pathlib import Path
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
-from .database import get_db, init_db
+from .database import get_db, init_db, drop_db
 from .models import MenuItem, Customer, Order, OrderItem
 
 
 
 async def load_initial_data():
-    print("Creating initial database")
-    init_db()
+    # Remove any existing database tables
+    drop_db()
 
-    # Get a db session:
+    init_db()
+    print("Database tables created")
+
+    # Get a db session and load data
     db = get_db()
     load_regular_menus(db)
     load_customers(db)
@@ -38,22 +41,34 @@ def load_regular_menus(db: Session):
         'available_sunday': True
     }
 
-    for category, items in json_data.items():
-        for item in items:
-            # Create a MenuItem instance with data from JSON and set it to be available every day
-            menu_item = MenuItem(
-                name=item['name'],
-                price=item['price'],
-                ingredients=', '.join(item['ingredients']),
-                category=category,
-                labels=item['label'],
-                **availability_all_days
-            )
-            # Add the menu item to the session
-            db.add(menu_item)
+    try:
 
-    # Commit the session to save all the new records to the database
-    db.commit()
+        for category, items in json_data.items():
+            for item in items:
+                # Create a MenuItem instance with data from JSON and set it to be available every day
+                menu_item = MenuItem(
+                    name=item['name'],
+                    price=item['price'],
+                    ingredients=', '.join(item['ingredients']),
+                    category=category,
+                    labels=item['label'],
+                    **availability_all_days
+                )
+                # Add the menu item to the session
+                db.add(menu_item)
+
+        # Commit the session to save all the new records to the database
+        db.commit()
+
+    except Exception as e:
+        db.rollback()
+        print(f"Error loading data: {e}")
+
+    finally:
+        # Close the session
+        db.close()
+
+    print("Menu items have been loaded successfully.")
 
 
 def load_customers(db: Session):
