@@ -8,4 +8,4 @@ serve:
 
 test:
 	@echo "Running tests"
-	poetry run python -m pytest --cov tests/
+	poetry run python -m pytest --cov=src/backend --cov-report=term-missing

@@ -1,8 +1,8 @@
-from typing import List, Optional
-
-from pydantic import BaseModel, EmailStr, ConfigDict
 from datetime import datetime
 from enum import Enum
+from typing import List, Optional
+
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 
 class MenuItemBase(BaseModel):
@@ -132,3 +132,15 @@ class OrderInDB(OrderBase):
     items: List[OrderItemInDB]
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class OpeningHoursSchema(BaseModel):
+    id: int
+    day: str
+    start: Optional[str] = None
+    end: Optional[str] = None
+    status: str
+    is_special: bool
+
+    model_config = ConfigDict(from_attributes=True)
+

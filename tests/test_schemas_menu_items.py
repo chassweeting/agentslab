@@ -1,11 +1,9 @@
 import pytest
-
 from pydantic import ValidationError
-from src.backend.routers.schemas import (
-    MenuItemCreate,
-    MenuItemUpdate,
-    MenuItemInDB,
-)
+
+from src.backend.routers.schemas import (MenuItemCreate, MenuItemInDB,
+                                         MenuItemUpdate)
+
 
 # Test MenuItem schemas
 def test_menu_item_create():

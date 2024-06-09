@@ -1,13 +1,9 @@
 from datetime import datetime
 
-from src.backend.routers.schemas import (
-    OrderCreate,
-    OrderUpdate,
-    OrderInDB,
-    OrderItemCreate,
-    OrderItemInDB,
-    OrderStatus
-)
+from src.backend.routers.schemas import (OrderCreate, OrderInDB,
+                                         OrderItemCreate, OrderItemInDB,
+                                         OrderStatus, OrderUpdate)
+
 
 # Test OrderItem schemas
 def test_order_item_create():

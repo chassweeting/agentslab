@@ -1,13 +1,11 @@
 import json
-
 from pathlib import Path
+from datetime import datetime, timedelta
 
 from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError
 
-from .database import get_db, init_db, drop_db
-from .models import MenuItem, Customer, Order, OrderItem
-
+from .database import drop_db, get_db, init_db
+from .models import Customer, MenuItem, Order, OrderItem, OpeningHours, OrderStatus
 
 
 async def load_initial_data():
@@ -20,8 +18,10 @@ async def load_initial_data():
     # Get a db session and load data
     db = get_db()
     load_regular_menus(db)
+    load_specials(db)
     load_customers(db)
-
+    load_opening_hours(db)
+    create_orders(db)
 
 
 
@@ -71,6 +71,48 @@ def load_regular_menus(db: Session):
     print("Menu items have been loaded successfully.")
 
 
+
+def load_specials(db: Session):
+    path = Path(__file__).parent / "init_data" / "specials.json"
+    with open(path) as f:
+        json_data = json.load(f)
+
+    try:
+        for day, items in json_data.items():
+            for item in items:
+                # Create a MenuItem instance with data from JSON
+                special_item = MenuItem(
+                    name=item['name'],
+                    price=item['price'],
+                    ingredients=', '.join(item['ingredients']),
+                    category='Special',  # Use 'Special' as a category to distinguish from regular items
+                    labels=item.get('label', ''),
+                    available_monday=(day == 'Monday'),
+                    available_tuesday=(day == 'Tuesday'),
+                    available_wednesday=(day == 'Wednesday'),
+                    available_thursday=(day == 'Thursday'),
+                    available_friday=(day == 'Friday'),
+                    available_saturday=(day == 'Saturday'),
+                    available_sunday=(day == 'Sunday')
+                )
+                # Add the special item to the session
+                db.add(special_item)
+
+        # Commit the session to save all the new records to the database
+        db.commit()
+
+    except Exception as e:
+        db.rollback()
+        print(f"Error loading specials: {e}")
+
+    finally:
+        # Close the session
+        db.close()
+
+    print("Specials have been loaded successfully.")
+
+
+
 def load_customers(db: Session):
 
     path = Path(__file__).parent / "init_data" / "customers.json"
@@ -111,3 +153,99 @@ def load_customers(db: Session):
         db.close()
 
     print("Customer data has been loaded successfully.")
+
+
+
+def load_opening_hours(db: Session):
+    path = Path(__file__).parent / "init_data" / "opening-hours.json"
+    with open(path) as f:
+        json_data = json.load(f)
+
+    try:
+        for period, hours in json_data.items():
+            is_special = (period == "special")
+            for hour in hours:
+                opening_hour = OpeningHours(
+                    day=hour["day"],
+                    start=hour["start"],
+                    end=hour["end"],
+                    status=hour["status"],
+                    is_special=is_special
+                )
+                db.add(opening_hour)
+        db.commit()
+
+    except Exception as e:
+        db.rollback()
+        print(f"Error loading opening hours: {e}")
+
+    finally:
+        # Close the session
+        db.close()
+
+    print("Opening hours have been loaded successfully.")
+
+
+def create_orders(db: Session):
+    try:
+        # Fetch all customers and menu items ordered by id
+        customers = db.query(Customer).order_by(Customer.id).all()
+        menu_items = db.query(MenuItem).order_by(MenuItem.id).all()
+
+        # Check if there are enough customers
+        if len(customers) < 10 or len(menu_items) < 2:
+            print("Not enough customers or menu items available. Ensure you have at least 10 customers and 2 menu items.")
+            return
+
+        # Select the 1st, 4th, 6th, 8th, and 10th customers
+        selected_customers = [customers[0], customers[3], customers[5], customers[7], customers[9]]
+
+        selected_menu_items = menu_items[:2]
+
+        now = datetime.utcnow()
+        orders_info = [
+            {"status": OrderStatus.DELIVERED, "time_offset": timedelta(hours=-5), "customer": selected_customers[0], "items": selected_menu_items},
+            {"status": OrderStatus.DELIVERED, "time_offset": timedelta(hours=-4), "customer": selected_customers[1], "items": selected_menu_items},
+            {"status": OrderStatus.DISPATCHED, "time_offset": timedelta(hours=-3), "customer": selected_customers[2], "items": selected_menu_items},
+            {"status": OrderStatus.IN_PROGRESS, "time_offset": timedelta(hours=-2), "customer": selected_customers[3], "items": selected_menu_items},
+            {"status": OrderStatus.PENDING, "time_offset": timedelta(hours=-1), "customer": selected_customers[4], "items": selected_menu_items},
+        ]
+
+        for order_info in orders_info:
+            order_date = now + order_info["time_offset"]
+
+            # Create a new order
+            order = Order(
+                customer_id=order_info["customer"].id,
+                order_date=order_date,
+                total_amount=0.0,  # will be updated after adding order items
+                status=order_info["status"].value
+            )
+            db.add(order)
+            db.commit()  # Commit to generate order ID
+
+            # Add 2 items to each order
+            total_amount = 0.0
+            for menu_item in order_info["items"]:
+                quantity = 1  # Fixed quantity to keep it deterministic
+                order_item = OrderItem(
+                    order_id=order.id,
+                    menu_item_id=menu_item.id,
+                    quantity=quantity,
+                    note=f"Fixed note for {menu_item.name}"
+                )
+                db.add(order_item)
+                total_amount += menu_item.price * quantity
+
+            # Update the total amount for the order
+            order.total_amount = total_amount
+            db.commit()
+
+        print("Orders have been created successfully.")
+
+    except Exception as e:
+        db.rollback()
+        print(f"Error loading orders: {e}")
+
+    finally:
+        db.close()

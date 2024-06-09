@@ -1,7 +1,8 @@
 from datetime import datetime
 from enum import Enum as PyEnum
 
-from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey, DateTime, Text
+from sqlalchemy import (Boolean, Column, DateTime, Float, ForeignKey, Integer,
+                        String, Text)
 from sqlalchemy.orm import relationship
 
 from .database import Base
@@ -26,6 +27,10 @@ class MenuItem(Base):
 
     order_items = relationship("OrderItem", back_populates="menu_item")  # One-to-many relationship
 
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
 
 class Customer(Base):
     __tablename__ = 'customers'
@@ -45,6 +50,10 @@ class Customer(Base):
     phone = Column(String, nullable=True)
 
     orders = relationship("Order", back_populates="customer")  # One-to-many relationship
+
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
 
 
@@ -67,6 +76,10 @@ class Order(Base):
     customer = relationship("Customer", back_populates="orders")
     items = relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")  # One-to-many relationship
 
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
 
 class OrderItem(Base):
     __tablename__ = 'order_items'
@@ -79,3 +92,18 @@ class OrderItem(Base):
 
     order = relationship("Order", back_populates="items")
     menu_item = relationship("MenuItem", back_populates="order_items")
+
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+
+class OpeningHours(Base):
+    __tablename__ = 'opening_hours'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    day = Column(String, nullable=False)
+    start = Column(String, nullable=True)  # Use String for time
+    end = Column(String, nullable=True)    # Use String for time
+    status = Column(String, nullable=False)
+    is_special = Column(Boolean, default=False)  # Indicates if the hours are for VIP customers

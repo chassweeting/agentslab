@@ -1,10 +1,8 @@
-from fastapi import FastAPI, Depends
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routers import menu_items, customers, orders
-
 from .db.initial_data_loader import load_initial_data
-
+from .routers import customers, menu_items, orders, opening_hours
 
 app = FastAPI()
 
@@ -28,3 +26,4 @@ app.add_middleware(
 app.include_router(customers.router, prefix="/api", tags=["Customers"])
 app.include_router(menu_items.router, prefix="/api")
 app.include_router(orders.router, prefix="/api", tags=["Orders"])
+app.include_router(opening_hours.router, prefix="/api", tags=["OpeningHours"])

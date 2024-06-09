@@ -1,11 +1,12 @@
 from typing import List
 
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from ..db.database import get_db
-from ..db.models import Order, OrderItem, OrderStatus, MenuItem, Customer
-from .schemas import OrderCreate, OrderInDB, OrderUpdate, OrderItemCreate, OrderItemInDB
+from ..db.models import Customer, MenuItem, Order, OrderItem, OrderStatus
+from .schemas import (OrderCreate, OrderInDB, OrderItemCreate, OrderItemInDB,
+                      OrderUpdate)
 
 router = APIRouter()
 
