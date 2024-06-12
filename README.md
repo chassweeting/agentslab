@@ -4,37 +4,31 @@
 
 If running this lab locally, you will require: 
 - Python version 3.10 or later installed. 
+- [Poetry](https://python-poetry.org/docs/)
+
+
+## Dependencies: 
+
+- 
+-
 
 
 ## Running locally
 
 If you have Poetry installed locally. 
 
-```shell script
-pyenv install  3.10.14
-brew install pipx
-pipx install poetry
-```
-
-Install dependencies to set up your enivronment: 
+Install dependencies to set up your environment: 
 
 ```shell script
 poetry install
-
 ```
+
+
+## To run notebooks:
 
 Run: 
 
 `poetry run jupyter lab`
-
-
-Note: this is a contrived example - a real point of sale system would allow for 
-variants and add-on options for each menu item. 
-
-
-## Dependencies 
-
-You will require access to the 
 
 
 ## Set configuration 

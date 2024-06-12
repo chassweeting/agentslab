@@ -20,10 +20,10 @@ RUN poetry install --no-root --only main
 COPY src /app/src
 
 # Set the environment variable for FastAPI
-ENV MODULE_NAME="src.backend.main"
+ENV MODULE_NAME="src.app.main"
 
 # Make port 8000 available to the world outside this container
-EXPOSE 8000
+EXPOSE 3000
 
 # Run the FastAPI application using Uvicorn
-CMD ["poetry", "run", "uvicorn", "src.backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["poetry", "run", "uvicorn", "src.backend.main:app", "--host", "0.0.0.0", "--port", "3000"]

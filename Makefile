@@ -1,13 +1,13 @@
 SHELL := /bin/bash
 export PYTHONPATH := .
 
-DOCKER_IMAGE_NAME=restaurant-api
+DOCKER_IMAGE_NAME=chat-api
 DOCKER_TAG=latest
 PYTHON_VERSION=3.12
 
 serve:
 	@echo "Running the FastAPI APIs"
-	cd src && poetry run uvicorn backend.main:app --host 0.0.0.0 --reload && cd ..
+	cd src && poetry run uvicorn app.main:app --port 3000 --host 0.0.0.0 --reload && cd ..
 
 
 test:
@@ -32,7 +32,7 @@ build: update-lockfile docker-build
 # Target to run the Docker container
 run:
 	@echo "Running Docker container..."
-	docker run -d -p 8000:8000 --name $(DOCKER_IMAGE_NAME) $(DOCKER_IMAGE_NAME):$(DOCKER_TAG)
+	docker run -d -p 3000:3000 --name $(DOCKER_IMAGE_NAME) $(DOCKER_IMAGE_NAME):$(DOCKER_TAG)
 
 
 # Clean target to remove the Docker container
