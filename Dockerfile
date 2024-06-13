@@ -26,4 +26,4 @@ ENV MODULE_NAME="src.app.main"
 EXPOSE 3000
 
 # Run the FastAPI application using Uvicorn
-CMD ["poetry", "run", "uvicorn", "src.backend.main:app", "--host", "0.0.0.0", "--port", "3000"]
+CMD ["poetry", "run", "uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "3000"]
