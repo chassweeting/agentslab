@@ -1,3 +1,5 @@
+from typing import List
+
 from langchain.agents import AgentExecutor, create_openai_tools_agent
 from langchain_core.pydantic_v1 import ValidationError
 from langchain_core.tools import ToolException
@@ -9,9 +11,10 @@ from .tools.hours import opening_hours_tool
 from .tools.order import cancel_order_tool, retrieve_order_tool, retrieve_user_orders_tool
 from .tools.menu import daily_menu_tool
 from .llm import create_llm
+from .schemas import MessageSchema
 
 
-def run_agent(user_request: str, chat_history: list=[]):
+def run_agent(user_request: str, chat_history: List[MessageSchema]=[]):
     """Simple method to run the make a call to the agent.
 
        This function prepares a chat template, formats the input prompt, and executes
@@ -36,7 +39,7 @@ def run_agent(user_request: str, chat_history: list=[]):
     chat_template = load_chat_template()
 
     # Load the Tools. See the 'tools' subdirectory for each tool definition.
-    tools = [daily_menu_tool, customer_retrieval_tool, opening_hours_tool]
+    tools = [daily_menu_tool, customer_retrieval_tool, opening_hours_tool, retrieve_user_orders_tool, cancel_order_tool]
 
     # Create the Langchain Agent which requires the LLM, Tools and PromptTemplate
     agent = create_openai_tools_agent(llm, tools, chat_template)
@@ -46,8 +49,13 @@ def run_agent(user_request: str, chat_history: list=[]):
     # into the message history, and calling the llm again, etc.
     agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
+    # Convert the chat_history to the Langchain format
+    # (i.e. list of tuples as required by from langchain_core.messages.utils._convert_to_message)
+    # https://github.com/langchain-ai/langchain/blob/master/libs/core/langchain_core/messages/utils.py
+    chat_history_langchain_format = [(msg.role, msg.content) for msg in chat_history]
+
     # Invoke the agent
     # https://api.python.langchain.com/en/latest/agents/langchain.agents.agent.AgentExecutor.html
-    response = agent_executor.invoke({"user_request": user_request, "chat_history": chat_history})
+    response = agent_executor.invoke({"user_request": user_request, "chat_history":  chat_history_langchain_format})
     return response
 

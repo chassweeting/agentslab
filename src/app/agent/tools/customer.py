@@ -5,6 +5,7 @@ import requests
 from langchain.pydantic_v1 import BaseModel, Field
 from langchain.tools import tool
 
+from .config import restaurant_api_base
 
 class CustomerRetrievalToolInputSchema(BaseModel):
     email: Optional[str] = Field(description="The email address of the customer")
@@ -35,7 +36,7 @@ def customer_retrieval_tool(lastname: str = None,
     Returns:
         List[Dict[str, Any]]: The customer data.
     """
-    url = f"http://localhost:8000/api/customers"
+    url = f"{restaurant_api_base}/api/customers"
     params = {'firstname': firstname, 'lastname': lastname, 'email': email, 'phone': phone}
     response = requests.get(url, params=params)
     response.raise_for_status()     # Raise an error for bad status codes

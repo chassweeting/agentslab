@@ -4,6 +4,7 @@ import requests
 from langchain.tools import tool
 from langchain.pydantic_v1 import BaseModel, Field
 
+from .config import restaurant_api_base
 
 class OpeningHoursToolInputSchema(BaseModel):
     day: Optional[str] = Field(description="The day of the week for which you want the opening hours. eg. 'Monday'")
@@ -23,7 +24,7 @@ def opening_hours_tool(day=None, special=False):
         - A list of opening hours or an error message.
     """
     # Construct the URL and query parameters
-    url = f"http://localhost:8000/api/opening-hours"
+    url = f"{restaurant_api_base}/api/opening-hours"
     params = {}
     if day:
         params['day'] = day
