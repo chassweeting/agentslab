@@ -1,88 +1,76 @@
-# Agents Lab 
+# Langchain Agent for Guardrails lab 
 
-## Pre-requisites 
+A simple implementation of a Langchain Tools Agent using Azure OpenAI. 
 
-If running this lab locally, you will require: 
-- Python version 3.10 or later installed. 
-- [Poetry](https://python-poetry.org/docs/)
+## Dependencies 
 
+1. Azure OpenAI Resource.  
 
-## Dependencies: 
+2. Restaurant APIs which the agent will make calls to.  Options for running this:
+   - Clone https://github.com/chassweeting/agentslab-apis , install and run locally as per the README
+   - Clone https://github.com/chassweeting/agentslab-apis , build and run with Docker as per the README
+   
+3. Python (versions 3.10 to 3.12.3), and Poetry.
+   - Use pyenv for different Python versions: https://github.com/pyenv/pyenv
+   - Pipx is recommended for installing Poetry: https://pipx.pypa.io/stable/installation/ 
+   - Installing and using Poetry: https://python-poetry.org/docs/
+   
+   <br>
 
-- 
--
+## Configuration 
 
+If running the Restaurant APIs locally, then all you need provide is the Azure OpenAI resource configuration. 
 
-## Running locally
+Create Please create a `.env` file, and provide your own values for the following environment variables: 
+ 
+```bash
+AZURE_OPENAI_API_KEY=*****************************
+AZURE_OPENAI_DEPLOYMENT=gpt-4-32k
+AZURE_OPENAI_API_VERSION=2024-05-01-preview
+AZURE_OPENAI_ENDPOINT=https://******.openai.azure.com/
+```
 
-If you have Poetry installed locally. 
+<br>
 
-Install dependencies to set up your environment: 
+## Running 
 
-```shell script
+Install the Python dependencies. Note that this will also create a virtualenv in `.venv` within the same directory. 
+
+```bash 
 poetry install
 ```
 
+Running the FastAPI application locally: 
 
-## To run notebooks:
-
-Run: 
-
-`poetry run jupyter lab`
-
-
-## Set configuration 
-
-To successfully make a call against the Azure OpenAI service, you'll need the following: 
-
-https://learn.microsoft.com/en-us/azure/ai-services/openai/quickstart?tabs=command-line%2Cpython-new&pivots=programming-language-python
-
-Create a file `.env` in project root with this information: 
 ```bash 
-
+make serve 
 ```
 
-The Azure OpenAI API Versioning is described here. https://learn.microsoft.com/en-us/azure/ai-services/openai/api-version-deprecation
-Note that some functionality is only available on more recent versions. 
+
+## Running Docker 
+
+You can also build and run a Docker image using: 
+
+```bash 
+make build
+
+# Run using the local .env file with your configuration variables 
+make run 
+
+# To kill/clean-up running containers
+make docker-clean
+```
+<br>
 
 
-## Running with VS Code 
+## Further reading 
 
-When you run commands using `poetry run`, environment variables are automatically loaded.
+See the [docs](/docs) for ideas how to use the APIs and create Guardrails. 
 
-So, instead of running `jupyter lab` you run `poetry run jupyter lab` 
-
+<br>
 
 
 ## References: 
 
-Jupyter Lab 
-
-https://github.com/jupyterlab/jupyterlab 
-
-
-## Running in the cloud. Options: 
-
-1. Running Jupyter locally from my laptop. But does that give you multiople access ? 
-
-Azure Lab Services 
-https://learn.microsoft.com/en-us/azure/lab-services/quick-create-resources
-https://learn.microsoft.com/en-us/azure/lab-services/class-type-jupyter-notebook
-https://visualstudio.microsoft.com/vs/features/notebooks-at-microsoft/
-
-2. Open the Repo with Binder 
-
-https://mybinder.org/
-
-
-3. ALso Python Anywhere or the Littlest Jupyter Hub 
-
-https://the-littlest-jupyterhub.readthedocs.io/en/latest/index.html
-
-https://www.reddit.com/r/Python/comments/9107qu/best_way_to_share_a_jupyter_notebook_during_a/
-
-
-4. Other commercial services 
-
-https://www.jetbrains.com/datalore/
-https://deepnote.com/
+- The Azure OpenAI API Versioning:  https://learn.microsoft.com/en-us/azure/ai-services/openai/api-version-deprecation.  Note that some functionality is only available on more recent versions.
+- Note that we use 3.12.3 due to this Pydantic bug afflicting Python 3.12.4 and up. https://github.com/pydantic/pydantic/issues/9609

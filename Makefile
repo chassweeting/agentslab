@@ -32,7 +32,7 @@ build: update-lockfile docker-build
 # Target to run the Docker container
 run:
 	@echo "Running Docker container..."
-	docker run -d -p 3000:3000 --name $(DOCKER_IMAGE_NAME) $(DOCKER_IMAGE_NAME):$(DOCKER_TAG)
+	docker run -d -p 3000:3000 --env-file .env --name $(DOCKER_IMAGE_NAME) $(DOCKER_IMAGE_NAME):$(DOCKER_TAG)
 
 
 # Clean target to remove the Docker container

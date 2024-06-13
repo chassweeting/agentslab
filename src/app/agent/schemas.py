@@ -16,4 +16,4 @@ class ChatResponseSchema(BaseModel):
 class ChatRequestSchema(BaseModel):
     user_request: str
     chat_history: Optional[list[MessageSchema]] = []
-    user_id: Optional[str]
+    user_id: Optional[int] = None

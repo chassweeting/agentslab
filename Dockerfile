@@ -1,5 +1,5 @@
-# Use an official Python runtime as a parent image
-FROM python:3.12-slim
+# Use an official Python runtime as a parent image - note the need for 3.12.3 due to Pydantic bug at 3.12.4
+FROM python:3.12.3
 
 # Install debug tools
 RUN apt-get update && apt-get install -y curl procps && rm -rf /var/lib/apt/lists/*
