@@ -4,7 +4,10 @@ from langchain_core.tools import ToolException
 
 
 from .templates import load_chat_template
-from .tools import daily_menu_tool
+from .tools.customer import customer_retrieval_tool
+from .tools.hours import opening_hours_tool
+from .tools.order import cancel_order_tool, retrieve_order_tool, retrieve_user_orders_tool
+from .tools.menu import daily_menu_tool
 from .llm import create_llm
 
 
@@ -25,9 +28,6 @@ def run_agent(user_request: str, chat_history: list=[]):
                 'output': 'response-from-the-agent-as-a-result'
                 }
     """
-    print("************* user request ")
-    print(user_request)
-
     # Create an instance of the LLM (Azure OpenAI instance), load the chat template & create the Agent.
     llm = create_llm()
 
@@ -36,7 +36,7 @@ def run_agent(user_request: str, chat_history: list=[]):
     chat_template = load_chat_template()
 
     # Load the Tools. See the 'tools' subdirectory for each tool definition.
-    tools = [daily_menu_tool]
+    tools = [daily_menu_tool, customer_retrieval_tool, opening_hours_tool]
 
     # Create the Langchain Agent which requires the LLM, Tools and PromptTemplate
     agent = create_openai_tools_agent(llm, tools, chat_template)
