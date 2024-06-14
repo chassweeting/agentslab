@@ -6,9 +6,9 @@ A simple implementation of a Langchain Tools Agent using Azure OpenAI.
 
 1. Azure OpenAI Resource.  
 
-2. Restaurant APIs which the agent will make calls to.  Options for running this:
-   - Clone https://github.com/chassweeting/agentslab-apis , install and run locally as per the README
-   - Clone https://github.com/chassweeting/agentslab-apis , build and run with Docker as per the README
+2. Restaurant API which the agent will make calls to.  Clone https://github.com/chassweeting/restaurant-api and either:
+   - install and run locally as per the README or 
+   - build and run with Docker as per the README
    
 3. Python (versions 3.10 to 3.12.3), and Poetry.
    - Use pyenv for different Python versions: https://github.com/pyenv/pyenv
@@ -21,7 +21,7 @@ A simple implementation of a Langchain Tools Agent using Azure OpenAI.
 
 If running the Restaurant APIs locally, then all you need provide is the Azure OpenAI resource configuration. 
 
-Create Please create a `.env` file, and provide your own values for the following environment variables: 
+Please create a `.env` file, and provide your own values for the following environment variables: 
  
 ```bash
 AZURE_OPENAI_API_KEY=*****************************
@@ -29,6 +29,8 @@ AZURE_OPENAI_DEPLOYMENT=gpt-4-32k
 AZURE_OPENAI_API_VERSION=2024-05-01-preview
 AZURE_OPENAI_ENDPOINT=https://******.openai.azure.com/
 ```
+
+(An example has been provided for you to copy & update: `.env.template`) 
 
 <br>
 
